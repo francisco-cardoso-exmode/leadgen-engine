@@ -698,7 +698,7 @@ const compliancePoints = [
   }
 ];
 
-export default function Intro({ onComplete, onOpenConstructor }) {
+export default function Intro({ onComplete, onOpenConstructor, onBack }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [expandedTool, setExpandedTool] = useState(null);
   const slide = slides[currentSlide];
@@ -916,7 +916,14 @@ export default function Intro({ onComplete, onOpenConstructor }) {
     <Container>
       <Header>
         <HeaderContent>
-          <Logo>LeadGen Engine</Logo>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            {onBack && (
+              <HeaderButton onClick={onBack}>
+                Voltar
+              </HeaderButton>
+            )}
+            <Logo>LeadGen Engine</Logo>
+          </div>
           <HeaderActions>
             <ConceptBadge>Concept Software Idea — Francisco Cardoso & Luis Fernandes</ConceptBadge>
             <HeaderButton onClick={onComplete}>
