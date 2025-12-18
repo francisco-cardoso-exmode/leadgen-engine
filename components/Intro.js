@@ -535,33 +535,27 @@ const techStack = [
 const compliancePoints = [
   {
     title: 'Apenas Dados Públicos',
-    description: 'Recolhemos exclusivamente informação que os utilizadores tornaram pública nas suas redes sociais. Não acedemos a mensagens privadas, perfis fechados ou dados protegidos.',
-    icon: '🔓'
+    description: 'Recolhemos exclusivamente informação que os utilizadores tornaram pública nas suas redes sociais. Não acedemos a mensagens privadas, perfis fechados ou dados protegidos.'
   },
   {
     title: 'RGPD Compliant',
-    description: 'Base legal de interesse legítimo para B2B. Direito ao esquecimento implementado — qualquer pessoa pode solicitar remoção dos nossos sistemas em 72 horas.',
-    icon: '🇪🇺'
+    description: 'Base legal de interesse legítimo para B2B. Direito ao esquecimento implementado — qualquer pessoa pode solicitar remoção dos nossos sistemas em 72 horas.'
   },
   {
     title: 'APIs Oficiais Primeiro',
-    description: 'Priorizamos sempre APIs oficiais das plataformas (Meta, LinkedIn, X) que garantem acesso autorizado e dentro dos termos de serviço.',
-    icon: '✓'
+    description: 'Priorizamos sempre APIs oficiais das plataformas (Meta, LinkedIn, X) que garantem acesso autorizado e dentro dos termos de serviço.'
   },
   {
     title: 'Sem Spam, Sem Cold Outreach Agressivo',
-    description: 'A ferramenta identifica leads — não dispara emails em massa. O contacto é sempre feito de forma personalizada e respeitosa pela equipa comercial.',
-    icon: '✉'
+    description: 'A ferramenta identifica leads — não dispara emails em massa. O contacto é sempre feito de forma personalizada e respeitosa pela equipa comercial.'
   },
   {
     title: 'Transparência Total',
-    description: 'Política de privacidade clara. Os leads podem saber como foram identificados e optar por não serem contactados.',
-    icon: '👁'
+    description: 'Política de privacidade clara. Os leads podem saber como foram identificados e optar por não serem contactados.'
   },
   {
     title: 'Retenção Limitada',
-    description: 'Dados de leads não convertidos são automaticamente eliminados após 12 meses. Não acumulamos dados indefinidamente.',
-    icon: '🗓'
+    description: 'Dados de leads não convertidos são automaticamente eliminados após 12 meses. Não acumulamos dados indefinidamente.'
   }
 ];
 
@@ -676,7 +670,6 @@ export default function Intro({ onComplete }) {
             <ComplianceGrid>
               {compliancePoints.map((point, index) => (
                 <ComplianceCard key={index}>
-                  <ComplianceIcon>{point.icon}</ComplianceIcon>
                   <ComplianceTitle>{point.title}</ComplianceTitle>
                   <ComplianceDescription>{point.description}</ComplianceDescription>
                 </ComplianceCard>
