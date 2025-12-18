@@ -735,6 +735,7 @@ export default function PersonasDemo({ onBack, onOpenConstructor }) {
   const [expandedId, setExpandedId] = useState(null);
   const [customPersonas, setCustomPersonas] = useState([]);
   const [loadingCustom, setLoadingCustom] = useState(false);
+  const [diagnosingId, setDiagnosingId] = useState(null);
 
   useEffect(() => {
     if (activeTab === 'custom') {
@@ -765,6 +766,27 @@ export default function PersonasDemo({ onBack, onOpenConstructor }) {
       }
     } catch (error) {
       console.error('Error deleting persona:', error);
+    }
+  };
+
+  const diagnosePersona = async (id) => {
+    setDiagnosingId(id);
+    try {
+      const response = await fetch(`/api/personas/${id}/diagnose`, {
+        method: 'POST'
+      });
+      if (response.ok) {
+        const result = await response.json();
+        setCustomPersonas(prev => prev.map(p =>
+          p._id === id
+            ? { ...p, campaigns: result.campaigns, conversionScore: result.conversionScore, priority: result.priority, diagnosis: result.diagnosis }
+            : p
+        ));
+      }
+    } catch (error) {
+      console.error('Error diagnosing persona:', error);
+    } finally {
+      setDiagnosingId(null);
     }
   };
   
@@ -931,7 +953,53 @@ export default function PersonasDemo({ onBack, onOpenConstructor }) {
                     </ScoreTrack>
                   </ScoreBar>
 
-                  {persona.campaigns && (
+                  {isCustomTab && !persona.campaigns && (
+                    <div style={{ marginTop: '1rem' }}>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          diagnosePersona(persona._id);
+                        }}
+                        disabled={diagnosingId === persona._id}
+                        style={{
+                          width: '100%',
+                          padding: '12px 24px',
+                          fontSize: '14px',
+                          fontWeight: '500',
+                          background: '#000',
+                          color: '#fff',
+                          border: 'none',
+                          borderRadius: '8px',
+                          cursor: diagnosingId === persona._id ? 'not-allowed' : 'pointer',
+                          opacity: diagnosingId === persona._id ? 0.5 : 1
+                        }}
+                      >
+                        {diagnosingId === persona._id ? 'A analisar com IA...' : 'Gerar Diagnóstico com IA'}
+                      </button>
+                      <p style={{ fontSize: '12px', color: '#888', textAlign: 'center', marginTop: '8px' }}>
+                        O Claude vai analisar esta persona e gerar recomendações de campanha personalizadas
+                      </p>
+                    </div>
+                  )}
+
+                  {persona.diagnosis && (
+                    <div style={{
+                      background: '#f5f5f5',
+                      border: '1px solid #e0e0e0',
+                      borderRadius: '8px',
+                      padding: '16px',
+                      marginBottom: '16px'
+                    }}>
+                      <h4 style={{ fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#888', marginBottom: '8px' }}>
+                        Diagnóstico IA
+                      </h4>
+                      <p style={{ fontSize: '14px', color: '#333', lineHeight: '1.5' }}>
+                        {persona.diagnosis}
+                      </p>
+                    </div>
+                  )}
+
+                  {persona.campaigns && persona.campaigns.length > 0 && (
                     <CampaignSection>
                       <CampaignTitle>
                         Recomendações de Campanha
@@ -950,6 +1018,28 @@ export default function PersonasDemo({ onBack, onOpenConstructor }) {
                           </CampaignCard>
                         ))}
                       </CampaignGrid>
+                      {isCustomTab && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            diagnosePersona(persona._id);
+                          }}
+                          disabled={diagnosingId === persona._id}
+                          style={{
+                            marginTop: '16px',
+                            padding: '8px 16px',
+                            fontSize: '12px',
+                            background: 'transparent',
+                            color: '#666',
+                            border: '1px solid #ccc',
+                            borderRadius: '6px',
+                            cursor: diagnosingId === persona._id ? 'not-allowed' : 'pointer',
+                            opacity: diagnosingId === persona._id ? 0.5 : 1
+                          }}
+                        >
+                          {diagnosingId === persona._id ? 'A regenerar...' : 'Regenerar diagnóstico'}
+                        </button>
+                      )}
                     </CampaignSection>
                   )}
                 </PersonaDetails>
