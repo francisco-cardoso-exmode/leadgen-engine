@@ -26,7 +26,6 @@ export default function Home() {
       {view === 'intro' && (
         <Intro
           onComplete={() => setView('demo')}
-          onOpenConstructor={() => setView('constructor')}
           onBack={() => setView('landing')}
         />
       )}

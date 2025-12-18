@@ -698,7 +698,7 @@ const compliancePoints = [
   }
 ];
 
-export default function Intro({ onComplete, onOpenConstructor, onBack }) {
+export default function Intro({ onComplete, onBack }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [expandedTool, setExpandedTool] = useState(null);
   const slide = slides[currentSlide];
@@ -926,14 +926,9 @@ export default function Intro({ onComplete, onOpenConstructor, onBack }) {
           </div>
           <HeaderActions>
             <ConceptBadge>Concept Software Idea — Francisco Cardoso & Luis Fernandes</ConceptBadge>
-            <HeaderButton onClick={onComplete}>
+            <HeaderButton $primary onClick={onComplete}>
               Ver Demo
             </HeaderButton>
-            {onOpenConstructor && (
-              <HeaderButton $primary onClick={onOpenConstructor}>
-                + Nova Persona
-              </HeaderButton>
-            )}
           </HeaderActions>
         </HeaderContent>
       </Header>
