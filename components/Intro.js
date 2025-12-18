@@ -51,6 +51,31 @@ const ConceptBadge = styled.span`
   border: 1px solid ${({ theme }) => theme.colors.border};
   padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.sm};
   border-radius: ${({ theme }) => theme.radii.full};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    display: none;
+  }
+`;
+
+const HeaderActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.md};
+`;
+
+const ConstructorButton = styled.button`
+  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  border-radius: ${({ theme }) => theme.radii.md};
+  background: ${({ theme }) => theme.colors.accent};
+  color: ${({ theme }) => theme.colors.textInverse};
+  border: none;
+  transition: all ${({ theme }) => theme.transitions.fast};
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.accentHover};
+  }
 `;
 
 const Content = styled.div`
@@ -220,12 +245,22 @@ const ToolCard = styled.div`
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radii.lg};
+  overflow: hidden;
+  transition: all ${({ theme }) => theme.transitions.fast};
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.textTertiary};
+  }
+`;
+
+const ToolHeader = styled.div`
   padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: ${({ theme }) => theme.spacing.md};
-  
+  cursor: pointer;
+
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
     align-items: center;
   }
@@ -246,6 +281,12 @@ const ToolDescription = styled.p`
   color: ${({ theme }) => theme.colors.textTertiary};
 `;
 
+const ToolLimitationBadge = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+`;
+
 const ToolLimitation = styled.span`
   font-size: ${({ theme }) => theme.fontSizes.xs};
   color: #EF4444;
@@ -253,6 +294,26 @@ const ToolLimitation = styled.span`
   padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.sm};
   border-radius: ${({ theme }) => theme.radii.full};
   white-space: nowrap;
+`;
+
+const ToolExpandIcon = styled.span`
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  color: ${({ theme }) => theme.colors.textTertiary};
+  transition: transform ${({ theme }) => theme.transitions.fast};
+  transform: ${({ $expanded }) => $expanded ? 'rotate(180deg)' : 'rotate(0)'};
+`;
+
+const ToolDetails = styled.div`
+  padding: 0 ${({ theme }) => theme.spacing.lg} ${({ theme }) => theme.spacing.lg};
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
+  padding-top: ${({ theme }) => theme.spacing.md};
+  background: ${({ theme }) => theme.colors.background};
+`;
+
+const ToolDetailText = styled.p`
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  color: ${({ theme }) => theme.colors.textSecondary};
+  line-height: 1.6;
 `;
 
 const FeatureGrid = styled.div`
@@ -467,22 +528,26 @@ const tools = [
   {
     name: 'LinkedIn Sales Navigator',
     description: 'Bom para B2B, pesquisa por cargo e empresa',
-    limitation: 'Manual e caro'
+    limitation: 'Manual e caro',
+    details: 'Custa €99-149/mês por utilizador. Exige horas de trabalho manual para encontrar e qualificar leads. Não há forma de automatizar a identificação de sinais de intenção — dependes de filtros estáticos como cargo e indústria. Para equipas pequenas, o tempo gasto não compensa o retorno.'
   },
   {
     name: 'Apollo / Clearbit / ZoomInfo',
     description: 'Bases de dados de contactos empresariais',
-    limitation: 'Dados, não inteligência'
+    limitation: 'Dados, não inteligência',
+    details: 'Dão-te emails e telefones, mas não te dizem quem está interessado em comprar. São listas estáticas que desatualizam rapidamente. Não há scoring de intenção — estás a disparar para uma lista fria e a esperar que alguém responda. Taxa de resposta típica: 1-3%.'
   },
   {
     name: 'Meta / Google Ads',
     description: 'Audiências por interesses e demografia',
-    limitation: 'Sem precisão real'
+    limitation: 'Sem precisão real',
+    details: 'Segmentas por "interessado em marketing" ou "CEO", mas isso inclui milhões de pessoas. Não sabes quem está ativamente à procura do que vendes. Gastas budget a mostrar anúncios a quem não está no momento certo. CPAs inflacionados porque a segmentação é demasiado ampla.'
   },
   {
     name: 'CRM (HubSpot, Salesforce)',
     description: 'Gestão de contactos e pipeline',
-    limitation: 'Armazena, não descobre'
+    limitation: 'Armazena, não descobre',
+    details: 'Excelente para gerir leads que já tens, mas não te ajuda a encontrar novos. Dependes de inbound (que demora) ou de comprar listas (que são frias). O CRM organiza o que tens — não gera o que precisas. É o fim do funil, não o início.'
   }
 ];
 
@@ -559,8 +624,9 @@ const compliancePoints = [
   }
 ];
 
-export default function Intro({ onComplete }) {
+export default function Intro({ onComplete, onOpenConstructor }) {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [expandedTool, setExpandedTool] = useState(null);
   const slide = slides[currentSlide];
   const progress = ((currentSlide + 1) / slides.length) * 100;
   const isLast = currentSlide === slides.length - 1;
@@ -602,16 +668,26 @@ export default function Intro({ onComplete }) {
             <Label>O Que Usam Hoje</Label>
             <Title>Ferramentas fragmentadas</Title>
             <Subtitle>
-              Cada ferramenta resolve uma parte do problema, mas nenhuma conecta os pontos.
+              Cada ferramenta resolve uma parte do problema, mas nenhuma conecta os pontos. Clica para saber mais.
             </Subtitle>
             <ToolsGrid>
               {tools.map((tool, index) => (
                 <ToolCard key={index}>
-                  <ToolInfo>
-                    <ToolName>{tool.name}</ToolName>
-                    <ToolDescription>{tool.description}</ToolDescription>
-                  </ToolInfo>
-                  <ToolLimitation>{tool.limitation}</ToolLimitation>
+                  <ToolHeader onClick={() => setExpandedTool(expandedTool === index ? null : index)}>
+                    <ToolInfo>
+                      <ToolName>{tool.name}</ToolName>
+                      <ToolDescription>{tool.description}</ToolDescription>
+                    </ToolInfo>
+                    <ToolLimitationBadge>
+                      <ToolLimitation>{tool.limitation}</ToolLimitation>
+                      <ToolExpandIcon $expanded={expandedTool === index}>▼</ToolExpandIcon>
+                    </ToolLimitationBadge>
+                  </ToolHeader>
+                  {expandedTool === index && (
+                    <ToolDetails>
+                      <ToolDetailText>{tool.details}</ToolDetailText>
+                    </ToolDetails>
+                  )}
                 </ToolCard>
               ))}
             </ToolsGrid>
@@ -741,7 +817,14 @@ export default function Intro({ onComplete }) {
       <Header>
         <HeaderContent>
           <Logo>LeadGen Engine</Logo>
-          <ConceptBadge>Concept Software Idea — Francisco Cardoso & Luis Fernandes</ConceptBadge>
+          <HeaderActions>
+            <ConceptBadge>Concept Software Idea — Francisco Cardoso & Luis Fernandes</ConceptBadge>
+            {onOpenConstructor && (
+              <ConstructorButton onClick={onOpenConstructor}>
+                + Nova Persona
+              </ConstructorButton>
+            )}
+          </HeaderActions>
         </HeaderContent>
       </Header>
 
