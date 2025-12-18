@@ -176,34 +176,29 @@ const Synopsis = styled.p`
 
 const CTAContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: ${({ theme }) => theme.spacing.sm};
   justify-content: center;
-  width: 100%;
-  max-width: 300px;
+  margin-top: ${({ theme }) => theme.spacing.xl};
   animation: ${fadeIn} 1s ease 0.5s both;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
-    flex-direction: row;
     gap: ${({ theme }) => theme.spacing.md};
-    width: auto;
-    max-width: none;
+    margin-top: ${({ theme }) => theme.spacing.lg};
   }
 `;
 
 const CTAButton = styled.button`
-  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  font-weight: ${({ theme }) => theme.fontWeights.semibold};
-  border-radius: ${({ theme }) => theme.radii.md};
+  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.lg};
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  border-radius: 50px;
   transition: all ${({ theme }) => theme.transitions.fast};
   cursor: pointer;
-  width: 100%;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
-    padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.xl};
-    font-size: ${({ theme }) => theme.fontSizes.base};
-    width: auto;
+    padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.xl};
+    font-size: ${({ theme }) => theme.fontSizes.sm};
   }
 
   ${({ $primary }) =>
@@ -221,7 +216,7 @@ const CTAButton = styled.button`
       : `
     background: transparent;
     color: #fff;
-    border: 2px solid rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.5);
 
     &:hover {
       background: rgba(255, 255, 255, 0.1);
