@@ -433,67 +433,46 @@ const ComplianceDescription = styled.p`
   line-height: 1.5;
 `;
 
+const LimitationsGrid = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.md};
+`;
+
 const LimitationCard = styled.div`
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radii.lg};
   padding: ${({ theme }) => theme.spacing.lg};
-  margin-bottom: ${({ theme }) => theme.spacing.md};
 `;
 
 const LimitationPlatform = styled.h4`
   font-size: ${({ theme }) => theme.fontSizes.base};
   font-weight: ${({ theme }) => theme.fontWeights.semibold};
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.sm};
-`;
-
-const LimitationProblem = styled.div`
-  background: #FEF2F2;
-  border-left: 3px solid #EF4444;
-  padding: ${({ theme }) => theme.spacing.md};
   margin-bottom: ${({ theme }) => theme.spacing.md};
-  border-radius: 0 ${({ theme }) => theme.radii.md} ${({ theme }) => theme.radii.md} 0;
 `;
 
-const LimitationProblemLabel = styled.span`
+const LimitationSection = styled.div`
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+const LimitationLabel = styled.span`
   font-size: ${({ theme }) => theme.fontSizes.xs};
   font-weight: ${({ theme }) => theme.fontWeights.semibold};
-  color: #EF4444;
+  color: ${({ theme }) => theme.colors.textTertiary};
   text-transform: uppercase;
   letter-spacing: 0.05em;
   display: block;
   margin-bottom: ${({ theme }) => theme.spacing.xs};
 `;
 
-const LimitationProblemText = styled.p`
+const LimitationText = styled.p`
   font-size: ${({ theme }) => theme.fontSizes.sm};
-  color: #991B1B;
-  line-height: 1.5;
-`;
-
-const LimitationSolution = styled.div`
-  background: #F0FDF4;
-  border-left: 3px solid #22C55E;
-  padding: ${({ theme }) => theme.spacing.md};
-  border-radius: 0 ${({ theme }) => theme.radii.md} ${({ theme }) => theme.radii.md} 0;
-`;
-
-const LimitationSolutionLabel = styled.span`
-  font-size: ${({ theme }) => theme.fontSizes.xs};
-  font-weight: ${({ theme }) => theme.fontWeights.semibold};
-  color: #22C55E;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  display: block;
-  margin-bottom: ${({ theme }) => theme.spacing.xs};
-`;
-
-const LimitationSolutionText = styled.p`
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  color: #166534;
+  color: ${({ theme }) => theme.colors.textSecondary};
   line-height: 1.5;
 `;
 
@@ -838,19 +817,21 @@ export default function Intro({ onComplete, onOpenConstructor }) {
             <Subtitle>
               Transparência total sobre o que cada plataforma permite — e como trabalhamos dentro dessas regras.
             </Subtitle>
-            {limitations.map((limitation, index) => (
-              <LimitationCard key={index}>
-                <LimitationPlatform>{limitation.platform}</LimitationPlatform>
-                <LimitationProblem>
-                  <LimitationProblemLabel>Problema</LimitationProblemLabel>
-                  <LimitationProblemText>{limitation.problem}</LimitationProblemText>
-                </LimitationProblem>
-                <LimitationSolution>
-                  <LimitationSolutionLabel>A Nossa Abordagem</LimitationSolutionLabel>
-                  <LimitationSolutionText>{limitation.solution}</LimitationSolutionText>
-                </LimitationSolution>
-              </LimitationCard>
-            ))}
+            <LimitationsGrid>
+              {limitations.map((limitation, index) => (
+                <LimitationCard key={index}>
+                  <LimitationPlatform>{limitation.platform}</LimitationPlatform>
+                  <LimitationSection>
+                    <LimitationLabel>Limitação</LimitationLabel>
+                    <LimitationText>{limitation.problem}</LimitationText>
+                  </LimitationSection>
+                  <LimitationSection>
+                    <LimitationLabel>A Nossa Abordagem</LimitationLabel>
+                    <LimitationText>{limitation.solution}</LimitationText>
+                  </LimitationSection>
+                </LimitationCard>
+              ))}
+            </LimitationsGrid>
           </>
         );
 
