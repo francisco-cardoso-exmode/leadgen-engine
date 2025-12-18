@@ -433,6 +433,70 @@ const ComplianceDescription = styled.p`
   line-height: 1.5;
 `;
 
+const LimitationCard = styled.div`
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radii.lg};
+  padding: ${({ theme }) => theme.spacing.lg};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+`;
+
+const LimitationPlatform = styled.h4`
+  font-size: ${({ theme }) => theme.fontSizes.base};
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+`;
+
+const LimitationProblem = styled.div`
+  background: #FEF2F2;
+  border-left: 3px solid #EF4444;
+  padding: ${({ theme }) => theme.spacing.md};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+  border-radius: 0 ${({ theme }) => theme.radii.md} ${({ theme }) => theme.radii.md} 0;
+`;
+
+const LimitationProblemLabel = styled.span`
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  color: #EF4444;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: ${({ theme }) => theme.spacing.xs};
+`;
+
+const LimitationProblemText = styled.p`
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  color: #991B1B;
+  line-height: 1.5;
+`;
+
+const LimitationSolution = styled.div`
+  background: #F0FDF4;
+  border-left: 3px solid #22C55E;
+  padding: ${({ theme }) => theme.spacing.md};
+  border-radius: 0 ${({ theme }) => theme.radii.md} ${({ theme }) => theme.radii.md} 0;
+`;
+
+const LimitationSolutionLabel = styled.span`
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  color: #22C55E;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: ${({ theme }) => theme.spacing.xs};
+`;
+
+const LimitationSolutionText = styled.p`
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  color: #166534;
+  line-height: 1.5;
+`;
+
 const Footer = styled.footer`
   padding: ${({ theme }) => theme.spacing.lg};
   border-top: 1px solid ${({ theme }) => theme.colors.border};
@@ -508,6 +572,11 @@ const slides = [
     type: 'tech'
   },
   {
+    id: 'limitations',
+    label: 'Limitações',
+    type: 'limitations'
+  },
+  {
     id: 'compliance',
     label: 'Compliance',
     type: 'compliance'
@@ -572,28 +641,54 @@ const features = [
 
 const techStack = [
   {
-    category: 'Recolha de Dados',
+    category: 'Instagram (MVP Principal)',
     items: [
-      { name: 'APIs Oficiais', description: 'Meta Graph API, LinkedIn API, X API — acesso autorizado e dentro dos termos de serviço' },
-      { name: 'Web Scraping Ético', description: 'Apenas dados públicos, respeitando robots.txt e rate limits' },
-      { name: 'Data Enrichment', description: 'Clearbit, Apollo, Hunter.io para enriquecimento de contactos B2B' }
+      { name: 'Meta Graph API', description: 'Acesso oficial a followers, engagement, menções e dados de business accounts' },
+      { name: 'Análise de Perfis', description: 'Bios, hashtags seguidas, marcas com engagement, padrões de conteúdo' },
+      { name: 'Audience Insights', description: 'Demographics, locations, e comportamentos da audiência' }
+    ]
+  },
+  {
+    category: 'LinkedIn (Abordagem Híbrida)',
+    items: [
+      { name: 'Browser Extension', description: 'Pontua leads enquanto navegas no Sales Navigator — sem extrair dados para fora' },
+      { name: 'Input Semi-Automático', description: 'Importação de listas CSV do Sales Navigator com enriquecimento posterior' },
+      { name: 'Company Pages API', description: 'Dados de páginas de empresa onde és admin (posts, followers, analytics)' }
+    ]
+  },
+  {
+    category: 'Dados First-Party',
+    items: [
+      { name: 'Pixel & Website', description: 'Comportamento de visitantes, páginas vistas, tempo no site, conversões' },
+      { name: 'CRM Integration', description: 'Sync com HubSpot, Salesforce — enriquece contactos existentes' },
+      { name: 'Email Lists', description: 'Análise de engagement de email para scoring de intenção' }
     ]
   },
   {
     category: 'Processamento & IA',
     items: [
-      { name: 'NLP & Análise de Texto', description: 'OpenAI GPT-4 / Claude para análise de bios, posts e contexto semântico' },
-      { name: 'Machine Learning', description: 'Modelos de scoring preditivo treinados com dados de conversão reais' },
-      { name: 'Graph Analysis', description: 'Neo4j para mapear conexões e identificar clusters de interesse' }
+      { name: 'NLP & Análise de Texto', description: 'GPT-4 / Claude para análise semântica de bios, posts e contexto' },
+      { name: 'Scoring Preditivo', description: 'Modelos ML treinados com dados de conversão reais' },
+      { name: 'Pattern Matching', description: 'Identificação de sinais de intenção baseado em comportamentos' }
     ]
+  }
+];
+
+const limitations = [
+  {
+    platform: 'LinkedIn',
+    problem: 'API extremamente restritiva — não permite aceder a posts, comentários ou atividade de terceiros. Scraping é arriscado (ban de conta, violação de ToS).',
+    solution: 'Abordagem híbrida: browser extension que pontua dentro do Sales Navigator sem extrair dados. O utilizador qualifica manualmente, a ferramenta ajuda a decidir.'
   },
   {
-    category: 'Infraestrutura',
-    items: [
-      { name: 'Cloud Native', description: 'AWS/GCP com processamento distribuído para escala' },
-      { name: 'Real-time Processing', description: 'Apache Kafka para ingestão de eventos em tempo real' },
-      { name: 'Data Lake', description: 'Armazenamento seguro e encriptado de todos os dados' }
-    ]
+    platform: 'Instagram',
+    problem: 'Graph API requer business account e permissões específicas. Dados de utilizadores privados inacessíveis.',
+    solution: 'Foco em business accounts e perfis públicos. A API oficial dá acesso a followers, engagement básico e menções — suficiente para scoring inicial.'
+  },
+  {
+    platform: 'Dados de Terceiros',
+    problem: 'Ferramentas como Clearbit/Apollo dão emails mas não intenção. Listas estáticas desatualizam.',
+    solution: 'Usamos para enriquecimento, não como fonte primária. O valor está em combinar com sinais comportamentais dos canais onde temos acesso real.'
   }
 ];
 
@@ -731,6 +826,30 @@ export default function Intro({ onComplete, onOpenConstructor }) {
                   ))}
                 </TechList>
               </TechSection>
+            ))}
+          </>
+        );
+
+      case 'limitations':
+        return (
+          <>
+            <Label>Realidade Técnica</Label>
+            <Title>Limitações e como as resolvemos</Title>
+            <Subtitle>
+              Transparência total sobre o que cada plataforma permite — e como trabalhamos dentro dessas regras.
+            </Subtitle>
+            {limitations.map((limitation, index) => (
+              <LimitationCard key={index}>
+                <LimitationPlatform>{limitation.platform}</LimitationPlatform>
+                <LimitationProblem>
+                  <LimitationProblemLabel>Problema</LimitationProblemLabel>
+                  <LimitationProblemText>{limitation.problem}</LimitationProblemText>
+                </LimitationProblem>
+                <LimitationSolution>
+                  <LimitationSolutionLabel>A Nossa Abordagem</LimitationSolutionLabel>
+                  <LimitationSolutionText>{limitation.solution}</LimitationSolutionText>
+                </LimitationSolution>
+              </LimitationCard>
             ))}
           </>
         );
