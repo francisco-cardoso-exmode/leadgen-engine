@@ -63,18 +63,18 @@ const HeaderActions = styled.div`
   gap: ${({ theme }) => theme.spacing.md};
 `;
 
-const ConstructorButton = styled.button`
+const HeaderButton = styled.button`
   padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
   font-size: ${({ theme }) => theme.fontSizes.sm};
   font-weight: ${({ theme }) => theme.fontWeights.medium};
   border-radius: ${({ theme }) => theme.radii.md};
-  background: ${({ theme }) => theme.colors.accent};
-  color: ${({ theme }) => theme.colors.textInverse};
-  border: none;
+  background: ${({ $primary, theme }) => $primary ? theme.colors.accent : 'transparent'};
+  color: ${({ $primary, theme }) => $primary ? theme.colors.textInverse : theme.colors.textPrimary};
+  border: 1px solid ${({ $primary, theme }) => $primary ? theme.colors.accent : theme.colors.border};
   transition: all ${({ theme }) => theme.transitions.fast};
 
   &:hover {
-    background: ${({ theme }) => theme.colors.accentHover};
+    background: ${({ $primary, theme }) => $primary ? theme.colors.accentHover : theme.colors.surfaceHover};
   }
 `;
 
@@ -919,10 +919,13 @@ export default function Intro({ onComplete, onOpenConstructor }) {
           <Logo>LeadGen Engine</Logo>
           <HeaderActions>
             <ConceptBadge>Concept Software Idea — Francisco Cardoso & Luis Fernandes</ConceptBadge>
+            <HeaderButton onClick={onComplete}>
+              Ver Demo
+            </HeaderButton>
             {onOpenConstructor && (
-              <ConstructorButton onClick={onOpenConstructor}>
+              <HeaderButton $primary onClick={onOpenConstructor}>
                 + Nova Persona
-              </ConstructorButton>
+              </HeaderButton>
             )}
           </HeaderActions>
         </HeaderContent>

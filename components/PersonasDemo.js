@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 
 const fadeIn = keyframes`
@@ -730,12 +730,47 @@ const industries = {
   }
 };
 
-export default function PersonasDemo({ onBack }) {
+export default function PersonasDemo({ onBack, onOpenConstructor }) {
   const [activeTab, setActiveTab] = useState('sneakers');
   const [expandedId, setExpandedId] = useState(null);
+  const [customPersonas, setCustomPersonas] = useState([]);
+  const [loadingCustom, setLoadingCustom] = useState(false);
+
+  useEffect(() => {
+    if (activeTab === 'custom') {
+      loadCustomPersonas();
+    }
+  }, [activeTab]);
+
+  const loadCustomPersonas = async () => {
+    setLoadingCustom(true);
+    try {
+      const response = await fetch('/api/personas');
+      if (response.ok) {
+        const data = await response.json();
+        setCustomPersonas(data);
+      }
+    } catch (error) {
+      console.error('Error loading personas:', error);
+    } finally {
+      setLoadingCustom(false);
+    }
+  };
+
+  const deletePersona = async (id) => {
+    try {
+      const response = await fetch(`/api/personas/${id}`, { method: 'DELETE' });
+      if (response.ok) {
+        setCustomPersonas(prev => prev.filter(p => p._id !== id));
+      }
+    } catch (error) {
+      console.error('Error deleting persona:', error);
+    }
+  };
   
-  const currentIndustry = industries[activeTab];
-  const personas = currentIndustry.personas;
+  const isCustomTab = activeTab === 'custom';
+  const currentIndustry = !isCustomTab ? industries[activeTab] : null;
+  const personas = isCustomTab ? customPersonas : (currentIndustry?.personas || []);
   
   const highPriority = personas.filter(p => p.priority === 'high').length;
   const totalSignals = personas.reduce((acc, p) => acc + p.signals.length, 0);
@@ -745,7 +780,14 @@ export default function PersonasDemo({ onBack }) {
     <Container>
       <Header>
         <Logo>LeadGen Engine</Logo>
-        <BackButton onClick={onBack}>Voltar à Intro</BackButton>
+        <div style={{ display: 'flex', gap: '12px' }}>
+          {onOpenConstructor && (
+            <BackButton onClick={onOpenConstructor} style={{ background: 'var(--accent, #000)', color: '#fff', borderColor: 'var(--accent, #000)' }}>
+              + Nova Persona
+            </BackButton>
+          )}
+          <BackButton onClick={onBack}>Voltar à Intro</BackButton>
+        </div>
       </Header>
 
       <Content>
@@ -763,6 +805,16 @@ export default function PersonasDemo({ onBack }) {
               <TabSubtitle>{industry.subtitle}</TabSubtitle>
             </Tab>
           ))}
+          <Tab
+            $active={activeTab === 'custom'}
+            onClick={() => {
+              setActiveTab('custom');
+              setExpandedId(null);
+            }}
+          >
+            Minhas Personas
+            <TabSubtitle>Criadas por ti</TabSubtitle>
+          </Tab>
         </TabsContainer>
 
         <StatsBar>
@@ -784,24 +836,41 @@ export default function PersonasDemo({ onBack }) {
           </Stat>
         </StatsBar>
 
+        {isCustomTab && loadingCustom && (
+          <div style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+            A carregar personas...
+          </div>
+        )}
+
+        {isCustomTab && !loadingCustom && personas.length === 0 && (
+          <div style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+            Ainda não criaste nenhuma persona. Clica em "+ Nova Persona" para começar.
+          </div>
+        )}
+
         <PersonasList>
-          {personas.map((persona, index) => (
-            <PersonaCard key={persona.id} $index={index}>
-              <PersonaHeader onClick={() => setExpandedId(expandedId === persona.id ? null : persona.id)}>
+          {personas.map((persona, index) => {
+            const personaId = persona._id || persona.id;
+            return (
+            <PersonaCard key={personaId} $index={index}>
+              <PersonaHeader onClick={() => setExpandedId(expandedId === personaId ? null : personaId)}>
                 <PersonaInfo>
                   <PersonaName>{persona.name}</PersonaName>
                   <PersonaRole>{persona.role}</PersonaRole>
                   <PersonaDescription>{persona.description}</PersonaDescription>
                 </PersonaInfo>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  {isCustomTab && persona.industry && (
+                    <span style={{ fontSize: '12px', color: '#888' }}>{persona.industry}</span>
+                  )}
                   <PriorityBadge $priority={persona.priority}>
                     {persona.priority === 'high' ? 'Alta' : persona.priority === 'medium' ? 'Média' : 'Baixa'}
                   </PriorityBadge>
-                  <ExpandIcon $expanded={expandedId === persona.id}>▼</ExpandIcon>
+                  <ExpandIcon $expanded={expandedId === personaId}>▼</ExpandIcon>
                 </div>
               </PersonaHeader>
 
-              {expandedId === persona.id && (
+              {expandedId === personaId && (
                 <PersonaDetails>
                   <DetailSection>
                     <DetailTitle>Demografia</DetailTitle>
@@ -886,7 +955,8 @@ export default function PersonasDemo({ onBack }) {
                 </PersonaDetails>
               )}
             </PersonaCard>
-          ))}
+            );
+          })}
         </PersonasList>
       </Content>
     </Container>

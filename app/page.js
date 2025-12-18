@@ -22,7 +22,10 @@ export default function Home() {
         />
       )}
       {view === 'demo' && (
-        <PersonasDemo onBack={() => setView('intro')} />
+        <PersonasDemo
+          onBack={() => setView('intro')}
+          onOpenConstructor={() => setView('constructor')}
+        />
       )}
       {view === 'constructor' && (
         <PersonaConstructor onBack={() => setView('intro')} />

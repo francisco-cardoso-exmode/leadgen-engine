@@ -234,6 +234,40 @@ const AddButton = styled.button`
   }
 `;
 
+const AIGenerateButton = styled.button`
+  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  color: ${({ theme }) => theme.colors.textInverse};
+  background: ${({ theme }) => theme.colors.textPrimary};
+  border: none;
+  border-radius: ${({ theme }) => theme.radii.md};
+  width: 100%;
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+  transition: all ${({ theme }) => theme.transitions.fast};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
+const AINote = styled.p`
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  color: ${({ theme }) => theme.colors.textTertiary};
+  text-align: center;
+  margin-top: -${({ theme }) => theme.spacing.sm};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+`;
+
 const ButtonGroup = styled.div`
   display: flex;
   justify-content: space-between;
@@ -355,8 +389,11 @@ const sources = [
   'Site'
 ];
 
-export default function PersonaConstructor({ onBack }) {
+export default function PersonaConstructor({ onBack, onSave }) {
   const [step, setStep] = useState(1);
+  const [saving, setSaving] = useState(false);
+  const [generating, setGenerating] = useState(false);
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     businessName: '',
     industry: '',
@@ -369,7 +406,7 @@ export default function PersonaConstructor({ onBack }) {
     income: '',
     location: '',
     channels: [],
-    signals: [{ text: '', source: 'Instagram' }]
+    signals: [{ text: '', source: 'Instagram', weight: 4 }]
   });
 
   const updateField = (field, value) => {
@@ -397,8 +434,106 @@ export default function PersonaConstructor({ onBack }) {
   const addSignal = () => {
     setFormData(prev => ({
       ...prev,
-      signals: [...prev.signals, { text: '', source: 'Instagram' }]
+      signals: [...prev.signals, { text: '', source: 'Instagram', weight: 4 }]
     }));
+  };
+
+  const generateWithAI = async () => {
+    setGenerating(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/personas/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          industry: formData.industry,
+          targetRole: formData.personaRole || '',
+          context: formData.productDescription
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao gerar persona');
+      }
+
+      const generated = await response.json();
+
+      setFormData(prev => ({
+        ...prev,
+        personaName: generated.name || prev.personaName,
+        personaRole: generated.role || prev.personaRole,
+        personaDescription: generated.description || prev.personaDescription,
+        ageRange: generated.demographics?.age || prev.ageRange,
+        income: generated.demographics?.income || prev.income,
+        location: generated.demographics?.location || prev.location,
+        signals: generated.signals?.length > 0
+          ? generated.signals.map(s => ({
+              text: s.name,
+              source: s.source,
+              weight: s.weight
+            }))
+          : prev.signals
+      }));
+
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setGenerating(false);
+    }
+  };
+
+  const savePersona = async () => {
+    setSaving(true);
+    setError(null);
+
+    const personaData = {
+      name: formData.personaName,
+      role: formData.personaRole,
+      description: formData.personaDescription,
+      priority: 'medium',
+      industry: formData.industry,
+      demographics: {
+        age: formData.ageRange,
+        location: formData.location,
+        income: formData.income
+      },
+      signals: formData.signals
+        .filter(s => s.text)
+        .map(s => ({
+          name: s.text,
+          weight: s.weight || 4,
+          source: s.source
+        })),
+      brandsFollowed: [],
+      conversionScore: 50,
+      campaigns: [],
+      isCustom: true
+    };
+
+    try {
+      const response = await fetch('/api/personas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(personaData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao guardar persona');
+      }
+
+      const saved = await response.json();
+
+      if (onSave) {
+        onSave(saved);
+      }
+
+      onBack();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const canProceed = () => {
@@ -466,6 +601,18 @@ export default function PersonaConstructor({ onBack }) {
       case 2:
         return (
           <FormSection>
+            <AIGenerateButton
+              onClick={generateWithAI}
+              disabled={generating || !formData.industry}
+            >
+              {generating ? 'A gerar com IA...' : 'Gerar Persona com IA'}
+            </AIGenerateButton>
+            <AINote>
+              {formData.industry
+                ? 'Gera automaticamente uma persona baseada na tua indústria e produto'
+                : 'Preenche a indústria no passo anterior para usar a IA'}
+            </AINote>
+
             <FormGroup>
               <Label>Nome da persona</Label>
               <Input
@@ -641,18 +788,25 @@ export default function PersonaConstructor({ onBack }) {
 
         {renderStep()}
 
+        {error && (
+          <div style={{ color: '#EF4444', marginTop: '1rem', textAlign: 'center' }}>
+            {error}
+          </div>
+        )}
+
         <ButtonGroup>
           <Button
             onClick={() => step > 1 ? setStep(step - 1) : onBack()}
+            disabled={saving}
           >
             {step === 1 ? 'Cancelar' : 'Anterior'}
           </Button>
           <Button
             $primary
-            onClick={() => step < 4 ? setStep(step + 1) : onBack()}
-            disabled={!canProceed()}
+            onClick={() => step < 4 ? setStep(step + 1) : savePersona()}
+            disabled={!canProceed() || saving}
           >
-            {step === 4 ? 'Guardar Persona' : 'Continuar'}
+            {saving ? 'A guardar...' : step === 4 ? 'Guardar Persona' : 'Continuar'}
           </Button>
         </ButtonGroup>
       </Content>
