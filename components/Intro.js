@@ -298,6 +298,80 @@ const FeatureDescription = styled.p`
   line-height: 1.5;
 `;
 
+const TechSection = styled.div`
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+`;
+
+const TechCategory = styled.h3`
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: ${({ theme }) => theme.colors.accent};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+`;
+
+const TechList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.sm};
+`;
+
+const TechItem = styled.div`
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radii.md};
+  padding: ${({ theme }) => theme.spacing.md};
+`;
+
+const TechName = styled.span`
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  color: ${({ theme }) => theme.colors.textPrimary};
+`;
+
+const TechDescription = styled.p`
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  color: ${({ theme }) => theme.colors.textTertiary};
+  margin-top: 4px;
+  line-height: 1.4;
+`;
+
+const ComplianceGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: ${({ theme }) => theme.spacing.md};
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
+    grid-template-columns: 1fr 1fr;
+  }
+`;
+
+const ComplianceCard = styled.div`
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radii.lg};
+  padding: ${({ theme }) => theme.spacing.lg};
+`;
+
+const ComplianceIcon = styled.span`
+  font-size: ${({ theme }) => theme.fontSizes['2xl']};
+  display: block;
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+`;
+
+const ComplianceTitle = styled.h4`
+  font-size: ${({ theme }) => theme.fontSizes.base};
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  margin-bottom: ${({ theme }) => theme.spacing.xs};
+`;
+
+const ComplianceDescription = styled.p`
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  color: ${({ theme }) => theme.colors.textSecondary};
+  line-height: 1.5;
+`;
+
 const Footer = styled.footer`
   padding: ${({ theme }) => theme.spacing.lg};
   border-top: 1px solid ${({ theme }) => theme.colors.border};
@@ -368,6 +442,16 @@ const slides = [
     type: 'solution'
   },
   {
+    id: 'tech',
+    label: 'Tecnologia',
+    type: 'tech'
+  },
+  {
+    id: 'compliance',
+    label: 'Compliance',
+    type: 'compliance'
+  },
+  {
     id: 'comparison',
     label: 'Antes vs Depois',
     type: 'comparison'
@@ -418,6 +502,66 @@ const features = [
   {
     title: 'Integração Direta',
     description: 'Exporta para CRM, cria audiências para Meta/LinkedIn Ads, ou dispara sequências de email automaticamente.'
+  }
+];
+
+const techStack = [
+  {
+    category: 'Recolha de Dados',
+    items: [
+      { name: 'APIs Oficiais', description: 'Meta Graph API, LinkedIn API, X API — acesso autorizado e dentro dos termos de serviço' },
+      { name: 'Web Scraping Ético', description: 'Apenas dados públicos, respeitando robots.txt e rate limits' },
+      { name: 'Data Enrichment', description: 'Clearbit, Apollo, Hunter.io para enriquecimento de contactos B2B' }
+    ]
+  },
+  {
+    category: 'Processamento & IA',
+    items: [
+      { name: 'NLP & Análise de Texto', description: 'OpenAI GPT-4 / Claude para análise de bios, posts e contexto semântico' },
+      { name: 'Machine Learning', description: 'Modelos de scoring preditivo treinados com dados de conversão reais' },
+      { name: 'Graph Analysis', description: 'Neo4j para mapear conexões e identificar clusters de interesse' }
+    ]
+  },
+  {
+    category: 'Infraestrutura',
+    items: [
+      { name: 'Cloud Native', description: 'AWS/GCP com processamento distribuído para escala' },
+      { name: 'Real-time Processing', description: 'Apache Kafka para ingestão de eventos em tempo real' },
+      { name: 'Data Lake', description: 'Armazenamento seguro e encriptado de todos os dados' }
+    ]
+  }
+];
+
+const compliancePoints = [
+  {
+    title: 'Apenas Dados Públicos',
+    description: 'Recolhemos exclusivamente informação que os utilizadores tornaram pública nas suas redes sociais. Não acedemos a mensagens privadas, perfis fechados ou dados protegidos.',
+    icon: '🔓'
+  },
+  {
+    title: 'RGPD Compliant',
+    description: 'Base legal de interesse legítimo para B2B. Direito ao esquecimento implementado — qualquer pessoa pode solicitar remoção dos nossos sistemas em 72 horas.',
+    icon: '🇪🇺'
+  },
+  {
+    title: 'APIs Oficiais Primeiro',
+    description: 'Priorizamos sempre APIs oficiais das plataformas (Meta, LinkedIn, X) que garantem acesso autorizado e dentro dos termos de serviço.',
+    icon: '✓'
+  },
+  {
+    title: 'Sem Spam, Sem Cold Outreach Agressivo',
+    description: 'A ferramenta identifica leads — não dispara emails em massa. O contacto é sempre feito de forma personalizada e respeitosa pela equipa comercial.',
+    icon: '✉'
+  },
+  {
+    title: 'Transparência Total',
+    description: 'Política de privacidade clara. Os leads podem saber como foram identificados e optar por não serem contactados.',
+    icon: '👁'
+  },
+  {
+    title: 'Retenção Limitada',
+    description: 'Dados de leads não convertidos são automaticamente eliminados após 12 meses. Não acumulamos dados indefinidamente.',
+    icon: '🗓'
   }
 ];
 
@@ -496,7 +640,51 @@ export default function Intro({ onComplete }) {
             </PointsList>
           </>
         );
-      
+
+      case 'tech':
+        return (
+          <>
+            <Label>Stack Tecnológica</Label>
+            <Title>Como construímos</Title>
+            <Subtitle>
+              Arquitectura moderna, escalável e preparada para processar milhões de sinais em tempo real.
+            </Subtitle>
+            {techStack.map((section, index) => (
+              <TechSection key={index}>
+                <TechCategory>{section.category}</TechCategory>
+                <TechList>
+                  {section.items.map((item, i) => (
+                    <TechItem key={i}>
+                      <TechName>{item.name}</TechName>
+                      <TechDescription>{item.description}</TechDescription>
+                    </TechItem>
+                  ))}
+                </TechList>
+              </TechSection>
+            ))}
+          </>
+        );
+
+      case 'compliance':
+        return (
+          <>
+            <Label>Ética & Compliance</Label>
+            <Title>Recolha responsável</Title>
+            <Subtitle>
+              Construído desde o início com privacidade e ética em mente. Não transgredimos — trabalhamos dentro das regras.
+            </Subtitle>
+            <ComplianceGrid>
+              {compliancePoints.map((point, index) => (
+                <ComplianceCard key={index}>
+                  <ComplianceIcon>{point.icon}</ComplianceIcon>
+                  <ComplianceTitle>{point.title}</ComplianceTitle>
+                  <ComplianceDescription>{point.description}</ComplianceDescription>
+                </ComplianceCard>
+              ))}
+            </ComplianceGrid>
+          </>
+        );
+
       case 'comparison':
         return (
           <>
