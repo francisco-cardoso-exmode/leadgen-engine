@@ -356,6 +356,78 @@ const ScoreFill = styled.div`
   transition: width 0.5s ease;
 `;
 
+const CampaignSection = styled.div`
+  background: ${({ theme }) => theme.colors.accent}10;
+  border: 1px solid ${({ theme }) => theme.colors.accent}30;
+  border-radius: ${({ theme }) => theme.radii.lg};
+  padding: ${({ theme }) => theme.spacing.lg};
+`;
+
+const CampaignTitle = styled.h4`
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  color: ${({ theme }) => theme.colors.accent};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+`;
+
+const CampaignGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: ${({ theme }) => theme.spacing.md};
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
+    grid-template-columns: 1fr 1fr;
+  }
+`;
+
+const CampaignCard = styled.div`
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radii.md};
+  padding: ${({ theme }) => theme.spacing.md};
+`;
+
+const CampaignType = styled.span`
+  display: inline-block;
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: ${({ theme }) => theme.colors.textTertiary};
+  margin-bottom: ${({ theme }) => theme.spacing.xs};
+`;
+
+const CampaignName = styled.h5`
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  margin-bottom: ${({ theme }) => theme.spacing.xs};
+`;
+
+const CampaignDescription = styled.p`
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  color: ${({ theme }) => theme.colors.textSecondary};
+  line-height: 1.4;
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+`;
+
+const CampaignMeta = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.md};
+  flex-wrap: wrap;
+`;
+
+const CampaignMetaItem = styled.span`
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  color: ${({ theme }) => theme.colors.textTertiary};
+
+  strong {
+    color: ${({ theme }) => theme.colors.textSecondary};
+  }
+`;
+
 const industries = {
   sneakers: {
     name: 'Sapatilhas de Luxo',
@@ -382,7 +454,25 @@ const industries = {
           { name: 'Bio menciona "design" ou "collector"', weight: 3, source: 'Bio' }
         ],
         brandsFollowed: ['Common Projects', 'Maison Margiela', 'Axel Arigato', 'Koio', 'Oliver Cabell'],
-        conversionScore: 78
+        conversionScore: 78,
+        campaigns: [
+          {
+            type: 'Meta Ads',
+            name: 'Lookalike de Compradores Farfetch',
+            description: 'Audiência lookalike baseada em compradores de luxury sneakers. Criativos focados em craftsmanship e materiais premium.',
+            channel: 'Instagram/Facebook',
+            budget: '€50-100/dia',
+            expectedCPA: '€15-25'
+          },
+          {
+            type: 'Email Sequence',
+            name: 'Behind the Craft',
+            description: 'Sequência de 5 emails mostrando processo de fabrico, materiais, e história. Foco em storytelling, não em desconto.',
+            channel: 'Email',
+            budget: '€0.02/email',
+            expectedCPA: '€8-12'
+          }
+        ]
       },
       {
         id: 2,
@@ -405,7 +495,25 @@ const industries = {
           { name: 'Pesquisas "minimalist sneakers"', weight: 3, source: 'Google' }
         ],
         brandsFollowed: ['Loro Piana', 'Brunello Cucinelli', 'The Row', 'Totême', 'COS'],
-        conversionScore: 72
+        conversionScore: 72,
+        campaigns: [
+          {
+            type: 'LinkedIn Ads',
+            name: 'C-Suite Weekend Style',
+            description: 'Segmentação por cargo (Director+) em setores de alto rendimento. Copy focado em versatilidade e qualidade duradoura.',
+            channel: 'LinkedIn',
+            budget: '€30-60/dia',
+            expectedCPA: '€35-50'
+          },
+          {
+            type: 'Retargeting',
+            name: 'MrPorter Visitors',
+            description: 'Retargeting de visitantes de páginas de sneakers premium em sites parceiros. Mensagem de "quiet luxury".',
+            channel: 'Display/Meta',
+            budget: '€20-40/dia',
+            expectedCPA: '€20-30'
+          }
+        ]
       },
       {
         id: 3,
@@ -428,7 +536,25 @@ const industries = {
           { name: 'Estética visual alinhada', weight: 3, source: 'Feed' }
         ],
         brandsFollowed: ['Highsnobiety', 'Hypebeast', 'GQ', 'MR PORTER', 'END.'],
-        conversionScore: 45
+        conversionScore: 45,
+        campaigns: [
+          {
+            type: 'Outreach Direto',
+            name: 'Programa de Embaixadores',
+            description: 'DM personalizado oferecendo produto em troca de conteúdo. Foco em criadores com estética alinhada e engagement alto.',
+            channel: 'Instagram DM',
+            budget: '€200-400/par',
+            expectedCPA: 'N/A (partnership)'
+          },
+          {
+            type: 'Gifting',
+            name: 'Seeding Campaign',
+            description: 'Envio de produto sem obrigação. Tracking de menções orgânicas. ROI medido em earned media value.',
+            channel: 'Direto',
+            budget: '€250/unidade',
+            expectedCPA: '€50-80 (por menção)'
+          }
+        ]
       }
     ]
   },
@@ -457,7 +583,25 @@ const industries = {
           { name: 'Presença em Maison&Objet, HostMilano', weight: 4, source: 'Posts' }
         ],
         brandsFollowed: ['Serax', '1882 Ltd', 'Astier de Villatte', 'Jars Céramistes', 'Bernardaud'],
-        conversionScore: 82
+        conversionScore: 82,
+        campaigns: [
+          {
+            type: 'Instagram Ads',
+            name: 'Plating Inspiration',
+            description: 'Carrossel mostrando pratos em contexto de fine dining. Targeting por interesses em gastronomia e marcas premium.',
+            channel: 'Instagram',
+            budget: '€40-80/dia',
+            expectedCPA: '€60-100 (lead)'
+          },
+          {
+            type: 'Event Marketing',
+            name: 'Chef Table Experience',
+            description: 'Convite para evento exclusivo de showcase de produto. Lista curada de chefs com restaurantes próprios.',
+            channel: 'Email + WhatsApp',
+            budget: '€500/evento',
+            expectedCPA: '€150-200 (lead qualificado)'
+          }
+        ]
       },
       {
         id: 5,
@@ -480,7 +624,25 @@ const industries = {
           { name: 'Participação em feiras do setor', weight: 4, source: 'Posts' }
         ],
         brandsFollowed: ['Villeroy & Boch', 'RAK Porcelain', 'Steelite', 'Dudson', 'Churchill'],
-        conversionScore: 75
+        conversionScore: 75,
+        campaigns: [
+          {
+            type: 'LinkedIn Ads',
+            name: 'Hotel Opening Alert',
+            description: 'Targeting de F&B Directors em grupos hoteleiros com expansão anunciada. InMail personalizado com case studies.',
+            channel: 'LinkedIn',
+            budget: '€50-100/dia',
+            expectedCPA: '€80-120 (meeting)'
+          },
+          {
+            type: 'ABM Campaign',
+            name: 'Top 50 Hotel Groups',
+            description: 'Account-based marketing focado nos 50 maiores grupos hoteleiros. Conteúdo personalizado por grupo.',
+            channel: 'Multi-channel',
+            budget: '€200-500/account',
+            expectedCPA: '€500-1000 (opportunity)'
+          }
+        ]
       },
       {
         id: 6,
@@ -503,7 +665,25 @@ const industries = {
           { name: 'Engagement com marcas de mobiliário', weight: 3, source: 'Instagram' }
         ],
         brandsFollowed: ['Dezeen', 'Wallpaper*', 'AD', 'Studio Ilse', 'India Mahdavi'],
-        conversionScore: 68
+        conversionScore: 68,
+        campaigns: [
+          {
+            type: 'Pinterest Ads',
+            name: 'Hospitality Moodboards',
+            description: 'Pins patrocinados em boards de design de interiores e hospitalidade. Link para catálogo de especificação.',
+            channel: 'Pinterest',
+            budget: '€30-60/dia',
+            expectedCPA: '€40-60 (download catálogo)'
+          },
+          {
+            type: 'PR & Content',
+            name: 'Dezeen Partnership',
+            description: 'Artigo patrocinado sobre projeto de referência usando os produtos. Amplificação em redes sociais.',
+            channel: 'Dezeen + Social',
+            budget: '€3-5k/artigo',
+            expectedCPA: '€100-150 (lead qualificado)'
+          }
+        ]
       },
       {
         id: 7,
@@ -526,7 +706,25 @@ const industries = {
           { name: 'Conexões com galeristas', weight: 3, source: 'Instagram' }
         ],
         brandsFollowed: ['1stDibs', 'Christies', 'Sothebys', 'Artemest', 'The Invisible Collection'],
-        conversionScore: 55
+        conversionScore: 55,
+        campaigns: [
+          {
+            type: 'Meta Ads',
+            name: '1stDibs Lookalike',
+            description: 'Audiência lookalike de compradores de design em plataformas premium. Criativos editoriais com foco em peças de autor.',
+            channel: 'Instagram',
+            budget: '€60-100/dia',
+            expectedCPA: '€100-150 (lead)'
+          },
+          {
+            type: 'Private Events',
+            name: 'Collector Preview',
+            description: 'Evento exclusivo de preview de coleção para lista curada de colecionadores. Parceria com galerias de arte.',
+            channel: 'Convite direto',
+            budget: '€2-5k/evento',
+            expectedCPA: '€300-500 (lead qualificado)'
+          }
+        ]
       }
     ]
   }
@@ -663,6 +861,28 @@ export default function PersonasDemo({ onBack }) {
                       <ScoreFill $value={persona.conversionScore} />
                     </ScoreTrack>
                   </ScoreBar>
+
+                  {persona.campaigns && (
+                    <CampaignSection>
+                      <CampaignTitle>
+                        Recomendações de Campanha
+                      </CampaignTitle>
+                      <CampaignGrid>
+                        {persona.campaigns.map((campaign, i) => (
+                          <CampaignCard key={i}>
+                            <CampaignType>{campaign.type}</CampaignType>
+                            <CampaignName>{campaign.name}</CampaignName>
+                            <CampaignDescription>{campaign.description}</CampaignDescription>
+                            <CampaignMeta>
+                              <CampaignMetaItem><strong>Canal:</strong> {campaign.channel}</CampaignMetaItem>
+                              <CampaignMetaItem><strong>Budget:</strong> {campaign.budget}</CampaignMetaItem>
+                              <CampaignMetaItem><strong>CPA esperado:</strong> {campaign.expectedCPA}</CampaignMetaItem>
+                            </CampaignMeta>
+                          </CampaignCard>
+                        ))}
+                      </CampaignGrid>
+                    </CampaignSection>
+                  )}
                 </PersonaDetails>
               )}
             </PersonaCard>
