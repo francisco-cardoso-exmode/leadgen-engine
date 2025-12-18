@@ -30,10 +30,27 @@ const Header = styled.header`
   }
 `;
 
+const HeaderContent = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: ${({ theme }) => theme.spacing.sm};
+`;
+
 const Logo = styled.h1`
   font-size: ${({ theme }) => theme.fontSizes.lg};
   font-weight: ${({ theme }) => theme.fontWeights.semibold};
   letter-spacing: -0.02em;
+`;
+
+const ConceptBadge = styled.span`
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  color: ${({ theme }) => theme.colors.textTertiary};
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.sm};
+  border-radius: ${({ theme }) => theme.radii.full};
 `;
 
 const Content = styled.div`
@@ -541,7 +558,10 @@ export default function Intro({ onComplete }) {
   return (
     <Container>
       <Header>
-        <Logo>LeadGen Engine</Logo>
+        <HeaderContent>
+          <Logo>LeadGen Engine</Logo>
+          <ConceptBadge>Concept Software Idea — Francisco Cardoso & Luis Fernandes</ConceptBadge>
+        </HeaderContent>
       </Header>
 
       <Content>
