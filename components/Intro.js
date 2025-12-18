@@ -601,20 +601,20 @@ const tools = [
 
 const features = [
   {
-    title: 'Define Personas Inteligentes',
-    description: 'Cria perfis de cliente ideal com sinais de intenção específicos — não apenas demografia, mas comportamentos que indicam interesse real.'
+    title: 'Define Personas com Sinais',
+    description: 'Cria perfis de cliente ideal com comportamentos específicos — que marcas seguem, que conteúdo consomem, que interesses demonstram publicamente.'
   },
   {
-    title: 'IA Identifica Leads',
-    description: 'O sistema analisa redes sociais, engagement, e sinais públicos para encontrar pessoas que encaixam nas tuas personas.'
+    title: 'Descobre Onde Estão',
+    description: 'Identifica em que plataformas e comunidades os teus potenciais clientes estão ativos. Não invades — observas dados públicos para perceber onde encontrá-los.'
   },
   {
-    title: 'Scoring Automático',
-    description: 'Cada lead recebe uma pontuação baseada na força dos sinais. Sabes quem está quente e quem ainda precisa de nurturing.'
+    title: 'Verifica o Match',
+    description: 'Compara cada pessoa com as tuas personas. Quantos sinais de intenção apresenta? Faz sentido contactar? A ferramenta ajuda-te a decidir com dados, não intuição.'
   },
   {
-    title: 'Integração Direta',
-    description: 'Exporta para CRM, cria audiências para Meta/LinkedIn Ads, ou dispara sequências de email automaticamente.'
+    title: 'Encontra e Actua',
+    description: 'Com leads qualificados, cria audiências para ads, exporta para CRM, ou inicia sequências de contacto personalizadas — sempre de forma respeitosa.'
   }
 ];
 
@@ -774,13 +774,13 @@ export default function Intro({ onComplete, onOpenConstructor }) {
             <Label>A Nossa Solução</Label>
             <Title>LeadGen Engine</Title>
             <Subtitle>
-              Um sistema inteligente que transforma a pergunta de "quem pode comprar" para "quem quer comprar agora".
+              Descobre onde estão os teus clientes ideais, verifica se fazem match com as tuas personas, e encontra-os de forma não invasiva.
             </Subtitle>
             <PointsList>
-              <Point>Define personas com sinais de intenção específicos — comportamentos que indicam interesse real</Point>
-              <Point>IA analisa redes sociais e engagement para identificar leads que encaixam</Point>
-              <Point>Scoring automático baseado em comportamento, não em suposições</Point>
-              <Point>Integração direta com ads e CRM — da descoberta à conversão</Point>
+              <Point>Define personas com sinais comportamentais — que marcas seguem, que conteúdo consomem, que interesses demonstram</Point>
+              <Point>Identifica onde estão ativos — em que plataformas e comunidades podes encontrá-los</Point>
+              <Point>Verifica o match com dados públicos — sem invadir, apenas observas quem se encaixa no perfil</Point>
+              <Point>Actua com precisão — contacta apenas quem faz sentido, de forma personalizada e respeitosa</Point>
             </PointsList>
           </>
         );
